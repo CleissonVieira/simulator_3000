@@ -1,0 +1,28 @@
+# Nesse arquivo estarão definidos o fluxo e componentes do modelo.
+
+# O usuario irá utilizar o padrão estabelecido para os componentes, que é sempre iniciar pela tag de 3 letras identificando qual componete ele está criando
+# Os dois primeiros componentes podem ser criados apenas uma vez, sendo o tempo de simulação e componente gerador de entidades temporarias, respectivamente.
+
+# Tag Tempo da simulação ; Tempo da simulação em min
+STM ; 40
+
+# Tag Gerador de Entidade Temporaria ; intervalo tempo de operação ; intervalo entre geração ; nome componente onde irá iniciar 
+SRC ; gerador ; (1,20) ; 2 ; entradaPrincipal
+
+# Tag roteador ; nome roteador ; origem roteador (SRC) ; saídas(probabilidade) roteador
+ROT ; entradaPrincipal ; gerador ; filaEstacao1(0.7),estacao2(0.3)
+
+# Tag fila ; nome fila ; algoritimo de seleção (F=FCFS, P=prioridade, L=LCFS) ; origem fila (ROT) ; destino fila 
+QUE ; filaEstacao1 ; F ; entradaPrincipal ; estacao1 
+
+# Tag comp finito (com fila) ; nome comp finito ; nº atendentes ; intervalo gasto ; origem ; destino
+GSF ; estacao1 ; 2 ; (2,7) ; filaEstacao1 ; entradaTrem1
+
+# Tag comp infitio (sem fila) ; intervalo gasto ; origem ; destino
+GSI ; estacao2 ; (1,5) ; filaEstacao1 ; entradaTrem2
+
+# Tag comp saída ; nome ; origem (quando entra aqui a ET morre)
+OUT ; entradaTrem1 ; estacao1
+
+# Tag comp saída ; nome ; origem 
+OUT ; entradaTrem2 ; estacao2
