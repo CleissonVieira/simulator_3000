@@ -6,6 +6,9 @@
 # Tag Tempo da simulação ; Tempo da simulação em min
 STM ; 40
 
+#
+ETP
+
 # Tag Gerador de Entidade Temporaria ; intervalo tempo de operação ; intervalo entre geração ; nome componente onde irá iniciar 
 SRC ; gerador ; (1,20) ; 2 ; entradaPrincipal
 
@@ -21,8 +24,6 @@ GSF ; estacao1 ; 2 ; (2,7) ; filaEstacao1 ; entradaTrem1
 # Tag comp infitio (sem fila) ; intervalo gasto ; origem ; destino
 GSI ; estacao2 ; (1,5) ; filaEstacao1 ; entradaTrem2
 
-# Tag comp saída ; nome ; origem (quando entra aqui a ET morre)
+# Tag comp saída ; nome ; origem (quando entra o usuario morre)
 OUT ; entradaTrem1 ; estacao1
-
-# Tag comp saída ; nome ; origem 
 OUT ; entradaTrem2 ; estacao2
