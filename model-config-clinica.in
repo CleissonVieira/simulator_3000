@@ -1,0 +1,31 @@
+# Nesse arquivo estarão definidos o fluxo e componentes do modelo. A cada criação de componente, sera criado uma coluna na matriz de calculo
+
+# O usuario irá utilizar o padrão estabelecido para os componentes, que é sempre iniciar pela tag de 3 letras identificando qual componete ele está criando
+# Os dois primeiros componentes podem ser criados apenas uma vez, sendo o tempo de simulação e componente gerador de entidades temporarias, respectivamente.
+
+# Tag Tempo da simulação ; Tempo da simulação em min
+STM ; 480
+
+# Tag Entidade Temporaria ; identificador ; controle tempo (contador) ; tempo gasto ; localização ; status
+ETP ; id ; ct ; tg ; loc ; status
+
+# Tag Gerador de Entidade Temporaria ; nome componente onde irá iniciar  ; intervalo tempo de operação ; intervalo entre geração
+SRC ; gerador ; filaFicha ; (1,400) ; 2 
+
+# Tag fila ; nome fila ; origem ; destino ; algoritimo de seleção (F=FCFS, P=prioridade, L=LCFS)
+QUE ; filaFicha ; gerador,atendConsultorio ; ficha ; F 
+
+# Tag comp finito (com fila) ; nome comp finito ; origem ; destino ; nº atendentes ; intervalo gasto
+GSF ; ficha ; filaFicha ; rotFicha ; 2 ; (2,7) 
+
+# Tag roteador ; nome roteador ; origem roteador (SRC) ; saídas(probabilidade) roteador
+ROT ; rotFicha ; ficha ; filaConsultorio(0.5),saida(0.5)
+
+# Tag fila ; nome fila ; origem ; destino ; algoritimo de seleção (F=FCFS, P=prioridade, L=LCFS)
+QUE ; filaConsultorio ; ficha ; atendConsultorio ; F 
+
+# Tag comp finito (com fila) ; nome comp finito ; origem ; destino ; nº atendentes ; intervalo gasto
+GSF ; atendConsultorio ; filaConsultorio ; rotFicha ; 3 ; (7,15) 
+
+# Tag comp saída ; nome ; origem (quando entra o usuario morre)
+OUT ; saida ; rotFicha
