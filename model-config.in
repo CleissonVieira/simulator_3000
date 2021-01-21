@@ -6,8 +6,8 @@
 # Tag Tempo da simulação ; Tempo da simulação em min
 STM ; 40
 
-# Tag Entidade Temporaria ; identificador ; controle tempo (contador) ; localização ; status
-ETP ; id ; ct ; loc ; status
+# Tag Entidade Temporaria ; identificador ; controle tempo (contador) ; tempo gasto ; localização ; status
+ETP ; id ; ct ; tg ; loc ; status
 
 # Tag Gerador de Entidade Temporaria ; nome componente onde irá iniciar  ; intervalo tempo de operação ; intervalo entre geração
 SRC ; gerador ; entradaPrincipal ; (1,20) ; 2 
