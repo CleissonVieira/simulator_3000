@@ -1,4 +1,4 @@
-# Nesse arquivo estarão definidos o fluxo e componentes do modelo.
+# Nesse arquivo estarão definidos o fluxo e componentes do modelo. A cada criação de componente, sera criado uma coluna na matriz de calculo
 
 # O usuario irá utilizar o padrão estabelecido para os componentes, que é sempre iniciar pela tag de 3 letras identificando qual componete ele está criando
 # Os dois primeiros componentes podem ser criados apenas uma vez, sendo o tempo de simulação e componente gerador de entidades temporarias, respectivamente.
