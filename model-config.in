@@ -6,23 +6,23 @@
 # Tag Tempo da simulação ; Tempo da simulação em min
 STM ; 40
 
-#
-ETP
+# Tag Entidade Temporaria ; identificador ; controle tempo (contador) ; localização ; status
+ETP ; id ; ct ; loc ; status
 
-# Tag Gerador de Entidade Temporaria ; intervalo tempo de operação ; intervalo entre geração ; nome componente onde irá iniciar 
-SRC ; gerador ; (1,20) ; 2 ; entradaPrincipal
+# Tag Gerador de Entidade Temporaria ; nome componente onde irá iniciar  ; intervalo tempo de operação ; intervalo entre geração
+SRC ; gerador ; entradaPrincipal ; (1,20) ; 2 
 
 # Tag roteador ; nome roteador ; origem roteador (SRC) ; saídas(probabilidade) roteador
-ROT ; entradaPrincipal ; gerador ; filaEstacao1(0.7),estacao2(0.3)
+ROT ; entradaPrincipal ; gerador ; filaEstacao1(0.7),entradaTrem1(0.3)
 
-# Tag fila ; nome fila ; algoritimo de seleção (F=FCFS, P=prioridade, L=LCFS) ; origem fila (ROT) ; destino fila 
-QUE ; filaEstacao1 ; F ; entradaPrincipal ; estacao1 
+# Tag fila ; nome fila ; origem ; destino ; algoritimo de seleção (F=FCFS, P=prioridade, L=LCFS)
+QUE ; filaEstacao1 ; entradaPrincipal ; estacao1 ; F 
 
-# Tag comp finito (com fila) ; nome comp finito ; nº atendentes ; intervalo gasto ; origem ; destino
-GSF ; estacao1 ; 2 ; (2,7) ; filaEstacao1 ; entradaTrem1
+# Tag comp finito (com fila) ; nome comp finito ; origem ; destino ; nº atendentes ; intervalo gasto
+GSF ; estacao1 ; filaEstacao1 ; entradaTrem1 ; 2 ; (2,7) 
 
-# Tag comp infitio (sem fila) ; intervalo gasto ; origem ; destino
-GSI ; estacao2 ; (1,5) ; filaEstacao1 ; entradaTrem2
+# Tag comp infitio (sem fila) ; nome ; origem ; destino ; intervalo gasto
+GSI ; estacao2 ; filaEstacao1 ; entradaTrem2 ; (1,5) 
 
 # Tag comp saída ; nome ; origem (quando entra o usuario morre)
 OUT ; entradaTrem1 ; estacao1
