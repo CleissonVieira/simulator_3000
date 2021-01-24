@@ -1,0 +1,52 @@
+{
+
+    "tempo_simulacao": 480,
+
+    "gerador_entidades_temporarias": {
+        "destino": "filaFicha",
+        "intervalo_tempo_de_operação": [1,400],
+        "intervalo_entre_geracao": 2
+    },
+
+    "roteadores": {
+        "rotFicha": {
+            "origem": "ficha",
+            "saidas": {
+                "filaConsultorio": 0.5,
+                "saida": 0.5
+            }
+        }
+    },
+
+    "fila": {
+        "filaFicha": {
+            "origem": "gerador",
+            "destino": "atendConsultorio"
+        },
+        "filaConsultorio": {
+            "origem": "ficha",
+            "destino": "atendConsultorio"
+        }
+    },
+
+    "componentes_finito": {
+        "ficha": {
+            "origem": "filaFicha",
+            "destino": "rotFicha",
+            "n_atendentes": 2,
+            "intervalo_gasto": [2,7]
+        },
+        "atendConsultorio": {
+            "origem": "filaConsultorio",
+            "destino": "rotFicha",
+            "n_atendentes": 3,
+            "intervalo_gasto": [7,15]
+        }
+    },
+
+    "componentes_saida": {
+        "saida": {
+            "origem": "rotFicha"
+        }
+    }
+}
