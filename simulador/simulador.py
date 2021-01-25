@@ -4,7 +4,9 @@ class Simulador:
 
     def __init__(self):
         print()
-        
+
+    # MÉTODOS DO MODELADOR
+
     # SRC - trabalha com os geradores de entidades temporárias
     def __GeradorEntidades__(self, config_entidade):
         init = config_entidade.get('intervalo_tempo_de_operação')[0]
@@ -23,7 +25,6 @@ class Simulador:
 
             entidade = []
             entidade.append(edt)        # Tempo inicial
-            entidade.append(True)       # Se esta ativa ou não
             entidade.append("gerador")  # Onde está
             entidade.append(destino)    # Para onde vai
             entidade.append(0)          # Tempo gasto
@@ -33,16 +34,9 @@ class Simulador:
             
         return entidades_temporaria
 
-    def __CalcEntidade__(self):
-        # trabalha com as entidades
-        ativa = True
-        localizacao = "gerador_entidades_temporarias"
-        destino = ""
-        tempo_gasto = 0 # por entidade
-        return {}
-
     # ROT - trabalha com o roteamento das entidades
     def __roteando_rota__(self, roteadores, entidades):
+        #aqui tem que ser feito ainda
         return {}
 
     # QUE - trabalha com as filas das entidades
@@ -109,8 +103,18 @@ class Simulador:
             saida.append(0) # media_espera = tempo_total / quantidade_entidades
             saida_x["estatisticas"] = saida
 
-        return config_saida
-        
+        return config_saida    
+    
+    # MÉTODOS DO SIMULADOR
+
+
+    # def __CalcEntidade__(self):
+    #     # trabalha com as entidades
+    #     localizacao = "gerador_entidades_temporarias"
+    #     destino = ""
+    #     tempo_gasto = 0 # por entidade
+    #     return {}
+    
     def __CalcFila__(self, filas, entidade, modelo):
         chave_fila = entidade[2][1]
         chave_entidade = entidade[4]
@@ -206,7 +210,7 @@ class Simulador:
 
         return [chave_comps_infinito, componente, chave_entidade, entidade]
     
-    def __componenteSaida__(self, comps_saida, entidades):
+    def __CalcComponenteSaida__(self, comps_saida, entidades):
 
         return {}
 

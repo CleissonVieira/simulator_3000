@@ -34,7 +34,7 @@ if modelo['roteadores']:
 
 # origem, estatísticas: [0]=qtd entidades | [1]=tmp total | [2]=media tempo no modelo
 if modelo['componentes_saida']:
-    componentes_saida = s3000.__StructSaida__(modelo[componentes_saida])
+    componentes_saida = s3000.__StructSaida__(modelo['componentes_saida'])
     pprint(componentes_saida)
 
 # Verificar nos componentes se Origem da entidade é != do próprio componente onde chegou, então verificar se é origem da saída e eliminar x entidade
@@ -49,27 +49,28 @@ while (tempo_simulado < modelo['tempo_simulacao']):
         break
     
     tempo_simulado = entidade_atual[0]
+    destino_entidade = entidade_atual[2][0]
 
-    if entidade_atual[3][0] == 'roteadores':
+    if destino_entidade == 'roteadores':
         roteadores, entidade_atual = s3000.__roteando_rota__(roteadores, entidade_atual)
     
-    elif entidade_atual[3][0] == 'fila':
+    elif destino_entidade == 'fila':
         vector = s3000.__CalcFila__(filas, entidade_atual, modelo)
         filas[vector[0]] = vector[1]
         entidades[vector[2]] = vector[3]
     
-    elif entidade_atual[3][0] == 'componentes_finito':
+    elif destino_entidade == 'componentes_finito':
         vector = s3000.__CalcComponenteFinito__(componentes_finito, entidade_atual, modelo)
         componentes_finito[vector[0]] = vector[1]
         entidades[vector[2]] = vector[3]
         break
     
-    elif entidade_atual[3][0] == 'componentes_infinito':
+    elif destino_entidade == 'componentes_infinito':
         vector = s3000.__CalcComponenteInfinito__(componentes_infinito, entidade_atual, modelo)
         componentes_infinito[vector[0]] = vector[1]
         entidades[vector[2]] = vector[3]
 
-    elif entidade_atual[3][0] == 'componentes_saida':
+    elif destino_entidade == 'componentes_saida':
         componentes_saida, entidade_atual = s3000.__componenteSaida__(componentes_saida, entidade_atual)
 
 
