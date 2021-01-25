@@ -8,23 +8,23 @@ with open('model_config/model_config.json', 'r') as json_file:
 
 s3000 = Simulador()
 
+# [0]=tempo gerado | [1]=localização | [2]=destino | [3]=tempo gasto | [4]=chave dict
 if modelo['gerador_entidades_temporarias']:
-    # [0]=tempo gerado | [1]=ativo ou não | [2]=localização | [3]=destino | [4]=tempo gasto
     entidades = s3000.__GeradorEntidades__(modelo['gerador_entidades_temporarias'])
     pprint(entidades)
-    
+
+# origem, destino, estatísticas: [0]=qtd entidades | [1]=tmp espera | [2]=media espera | [3]=entidade que mais esperou
 if modelo['fila']:
-    # origem, destino, estatísticas: [0]=qtd entidades | [1]=tmp espera | [2]=media espera | [3]=entidade que mais esperou
     filas = s3000.__StructFila__(modelo['fila'])
     pprint(filas)
-
+    
+# origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=media de tmp ocioso | [2]=tmp permanencia | [3]=media permanencia, atendentes: tempo osioso p/ atendente [] | disponibilidade de cada atendente []
 if modelo['componentes_finito']:
-    # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=media de tmp ocioso | [2]=tmp permanencia | [3]=media permanencia, atendentes: tempo osioso p/ atendente [] | disponibilidade de cada atendente []
     componentes_finito = s3000.__StructComponenteFinito__(modelo['componentes_finito'])
     pprint(componentes_finito)
 
+# origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=tmp permanencia | [2]=media permanencia
 if modelo['componentes_infinito']:
-    # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=tmp permanencia | [2]=media permanencia
     componentes_infinito = s3000.__StructComponenteInfinito__(modelo['componentes_infinito'])
     pprint(componentes_infinito)
 
@@ -32,8 +32,9 @@ if modelo['roteadores']:
     roteadores = modelo['roteadores']
     pprint(roteadores)
 
+# origem, estatísticas: [0]=qtd entidades | [1]=tmp total | [2]=media tempo no modelo
 if modelo['componentes_saida']:
-    componentes_saida = modelo['componentes_saida']
+    componentes_saida = s3000.__StructSaida__(modelo[componentes_saida])
     pprint(componentes_saida)
 
 # Verificar nos componentes se Origem da entidade é != do próprio componente onde chegou, então verificar se é origem da saída e eliminar x entidade

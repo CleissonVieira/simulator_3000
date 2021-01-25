@@ -105,25 +105,25 @@ class Simulador:
             saida_x = config_saida.get(saida)
             saida = []
             saida.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela saida
-            saida.append(0) # tempo_espera = tempo_saida - tempo_chegada
-            saida.append(0) # media_espera = tempo_espera / quantidade_entidades
+            saida.append(0) # tempo_total = tempo total da entidade até sair do modelo
+            saida.append(0) # media_espera = tempo_total / quantidade_entidades
             saida_x["estatisticas"] = saida
 
         return config_saida
         
     def __CalcFila__(self, filas, entidade, modelo):
-        chave_fila = entidade[3][1]
-        chave_entidade = entidade[5]
+        chave_fila = entidade[2][1]
+        chave_entidade = entidade[4]
         # print("\nEntidade: ", entidade)
-        fila = modelo[entidade[3][0]].get(entidade[3][1])
+        fila = modelo[entidade[2][0]].get(entidade[2][1])
         # print("\nfila: ", fila)
         atendimento = modelo[fila.get('destino')[0]].get(fila.get('destino')[1])
         # print("\nAtendimento: ", atendimento)
         estatisticas_atendimento = atendimento.get('estatistica_por_atendente')
         # print("\nEstatisticas por atendente: ", estatisticas_atendimento, "\n")
         
-        entidade[2] = entidade[3][1]
-        entidade[3] = [fila.get('destino')[0], fila.get('destino')[1]]
+        entidade[1] = entidade[2][1]
+        entidade[2] = [fila.get('destino')[0], fila.get('destino')[1]]
         fila.get('estatisticas')[0] += 1
         
         posicoes = 0
@@ -148,9 +148,9 @@ class Simulador:
         return [chave_fila, fila, chave_entidade, entidade]
 
     def __CalcComponenteFinito__(self, comps_finito, entidade, modelo):
-        chave_comps_finito = entidade[3][1]
-        chave_entidade = entidade[5]
-        componente = comps_finito.get(entidade[3][1])
+        chave_comps_finito = entidade[2][1]
+        chave_entidade = entidade[4]
+        componente = comps_finito.get(entidade[2][1])
         estatisticas_componente = componente.get('estatistica_por_atendente')
 
         posicoes = 0
@@ -168,9 +168,9 @@ class Simulador:
         temp_gasto = random.randint(interval[0], interval[1])
 
         entidade[0] += temp_gasto
-        entidade[2] = entidade[3][1]
-        entidade[3] = [componente.get('destino')[0], componente.get('destino')[1]]
-        entidade[4] += temp_gasto
+        entidade[1] = entidade[2][1]
+        entidade[2] = [componente.get('destino')[0], componente.get('destino')[1]]
+        entidade[3] += temp_gasto
 
         componente.get('estatisticas')[0] += 1
         componente.get('estatisticas')[2] += temp_gasto
@@ -188,17 +188,17 @@ class Simulador:
 
     def __CalcComponenteInfinito__(self, comps_infinito, entidade, modelo):
         
-        chave_comps_infinito = entidade[3][1]
-        chave_entidade = entidade[5]
-        componente = comps_infinito.get(entidade[3][1])
+        chave_comps_infinito = entidade[2][1]
+        chave_entidade = entidade[4]
+        componente = comps_infinito.get(entidade[2][1])
 
         interval = componente.get('intervalo_gasto')
         temp_gasto = random.randint(interval[0], interval[1])
 
         entidade[0] += temp_gasto
-        entidade[2] = entidade[3][1]
-        entidade[3] = [componente.get('destino')[0], componente.get('destino')[1]]
-        entidade[4] += temp_gasto
+        entidade[1] = entidade[2][1]
+        entidade[2] = [componente.get('destino')[0], componente.get('destino')[1]]
+        entidade[3] += temp_gasto
 
         componente.get('estatisticas')[0] += 1
         componente.get('estatisticas')[1] += temp_gasto
