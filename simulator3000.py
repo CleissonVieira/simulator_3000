@@ -44,16 +44,22 @@ print("\n\n\nSIMULAÇAO A PARTIR DESSE PONTO: \n")
 
 tempo_simulado = 0
 while (tempo_simulado < modelo['tempo_simulacao']):
+    entidade_atual = []
     for item in sorted(entidades, key = entidades.get):
         entidade_atual = entidades[item]
         break
-    
-    tempo_simulado = entidade_atual[0]
-    destino_entidade = entidade_atual[2][0]
+
+    if entidade_atual == []:
+        tempo_simulado = modelo['tempo_simulacao']
+        break
+    else:
+        tempo_simulado = entidade_atual[0]
+        destino_entidade = entidade_atual[2][0]
 
     print(tempo_simulado)
     print('\n')
     print(entidade_atual)
+        
 
     if destino_entidade == 'roteadores':
         roteadores, entidade_atual = s3000.__roteando_rota__(roteadores, entidade_atual)
@@ -77,11 +83,12 @@ while (tempo_simulado < modelo['tempo_simulacao']):
         vector = s3000.__CalcComponenteSaida__(componentes_saida, entidade_atual)
         componentes_saida[vector[0]] = vector[1]
         entidades.pop(vector[2])
-        break
+        pprint(entidades)
 
-pprint(modelo)
+        
+
+#pprint(modelo)
 # print("\n")
-pprint(entidades)
 
 
 

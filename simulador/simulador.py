@@ -136,7 +136,7 @@ class Simulador:
         entidade[1] = entidade[2][1]
         entidade[2] = [fila.get('destino')[0], fila.get('destino')[1]]
         
-        posicoes = 0
+        pos = 0
         prox_atendente_disp = 0
         tmp_prox_atendente_disp = 9999999
         
@@ -144,10 +144,10 @@ class Simulador:
             if disponivel <= entidade[0]: 
                 fila.get('estatisticas')[2] = fila.get('estatisticas')[1]/fila.get('estatisticas')[0]
                 return [chave_fila, fila, chave_entidade, entidade]
-            elif tmp_prox_atendente_disp > estatisticas_atendimento.get('fica_disponivel_em')[posicoes]:
-                    tmp_prox_atendente_disp = estatisticas_atendimento.get('fica_disponivel_em')[posicoes]
-                    prox_atendente_disp = posicoes
-            posicoes += 1
+            elif tmp_prox_atendente_disp > estatisticas_atendimento.get('fica_disponivel_em')[pos]:
+                    tmp_prox_atendente_disp = estatisticas_atendimento.get('fica_disponivel_em')[pos]
+                    prox_atendente_disp = pos
+            pos += 1
         
         entidade[0] = tmp_prox_atendente_disp
 
@@ -225,8 +225,6 @@ class Simulador:
         chave_saida = entidade[2][1]
         chave_entidade = entidade[4]
         saida = comps_saida.get(entidade[2][1])
-
-        print(saida)
 
         saida.get('estatisticas')[0] += 1
         saida.get('estatisticas')[1] += entidade[3]

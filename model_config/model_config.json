@@ -1,5 +1,5 @@
 {
-    "tempo_simulacao": 480,
+    "tempo_simulacao": 80,
 
     "gerador_entidades_temporarias": {
         "destino": ["fila","filaCaixa"],
