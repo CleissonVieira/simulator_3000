@@ -1,3 +1,5 @@
+import random
+
 class Simulador:
 
     def __init__(self):
@@ -18,7 +20,6 @@ class Simulador:
         for minute  in range(init, end+1, interval):
             if count == limit: break
             count += 1
-            edt += interval
 
             entidade = []
             entidade.append(edt)        # Tempo inicial
@@ -26,7 +27,9 @@ class Simulador:
             entidade.append("gerador")  # Onde está
             entidade.append(destino)    # Para onde vai
             entidade.append(0)          # Tempo gasto
-            entidades_temporaria[edt] = entidade            
+            entidades_temporaria[count] = entidade
+            entidade.append(count)
+            edt += interval           
             
         return entidades_temporaria
 
@@ -40,7 +43,7 @@ class Simulador:
 
 
     # ROT - trabalha com o roteamento das entidades
-    def __roteando_rota__(self, config_roteador):
+    def __roteando_rota__(self, roteadores, entidades):
         return {}
 
 
@@ -51,8 +54,6 @@ class Simulador:
             fila_x = config_fila.get(fila)
             fila = []
             fila.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-            fila.append(0) # tempo_chegada ++
-            fila.append(0) # tempo_saida ++
             fila.append(0) # tempo_espera = tempo_saida - tempo_chegada
             fila.append(0) # media_espera = tempo_espera / quantidade_entidades
             fila.append(0) # maior_tempo_espera_entidade = 0
@@ -60,15 +61,41 @@ class Simulador:
 
         return config_fila
 
-    def __CalcFila__(self, QUE):
-        # QUE - trabalha com as filas das entidades
-        quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-        tempo_chegada = 0
-        tempo_saida = 0
-        tempo_espera = tempo_saida - tempo_chegada
-        media_espera = tempo_espera / quantidade_entidades
-        maior_tempo_espera_entidade = 0
-        return {}
+    def __CalcFila__(self, filas, entidade, modelo):
+        chave_fila = entidade[3][1]
+        chave_entidade = entidade[5]
+        # print("\nEntidade: ", entidade)
+        fila = modelo[entidade[3][0]].get(entidade[3][1])
+        # print("\nfila: ", fila)
+        atendimento = modelo[fila.get('destino')[0]].get(fila.get('destino')[1])
+        # print("\nAtendimento: ", atendimento)
+        estatisticas_atendimento = atendimento.get('estatistica_por_atendente')
+        # print("\nEstatisticas por atendente: ", estatisticas_atendimento, "\n")
+        
+        entidade[2] = entidade[3][1]
+        entidade[3] = [fila.get('destino')[0], fila.get('destino')[1]]
+        fila.get('estatisticas')[0] += 1
+        
+        posicoes = 0
+        prox_atendente_disp = 0
+        tmp_prox_atendente_disp = 9999999
+        
+        for disponivel in estatisticas_atendimento.get('fica_disponivel_em'):
+            if disponivel <= entidade[0]: 
+                fila.get('estatisticas')[2] = fila.get('estatisticas')[1]/fila.get('estatisticas')[0]
+                return [chave_fila, fila, chave_entidade, entidade]
+            elif tmp_prox_atendente_disp > estatisticas_atendimento.get('fica_disponivel_em')[posicoes]:
+                    tmp_prox_atendente_disp = estatisticas_atendimento.get('fica_disponivel_em')[posicoes]
+                    prox_atendente_disp = posicoes
+            posicoes += 1
+        tmp_espera = (estatisticas_atendimento.get('fica_disponivel_em')[prox_atendente_disp]-entidade[0])
+        fila.get('estatisticas')[1] += tmp_espera
+        entidade[0] = tmp_prox_atendente_disp
+        fila.get('estatisticas')[2] = fila.get('estatisticas')[1]/fila.get('estatisticas')[0]
+        if fila.get('estatisticas')[3] < tmp_espera:
+            fila.get('estatisticas')[3] = tmp_espera
+        
+        return [chave_fila, fila, chave_entidade, entidade]
 
 
     # GSF - trabalha com os componentes finitos
@@ -89,30 +116,45 @@ class Simulador:
             atendentes = {}
             tempo_ocioso_individual_atendente = []
             disponibilidade_individual_atendente = []
+            fica_disponivel_em = []
             for atend in range(0, n_atendentes):
                 tempo_ocioso_individual_atendente.append(0)
-                disponibilidade_individual_atendente.append(0)
+                disponibilidade_individual_atendente.append(True)
+                fica_disponivel_em.append(0)
             
             atendentes['tempo_ocioso'] = tempo_ocioso_individual_atendente
             atendentes['disponibilidade'] = disponibilidade_individual_atendente
+            atendentes['fica_disponivel_em'] = fica_disponivel_em
             config_compsFinito_x['estatistica_por_atendente'] = atendentes
         return config_compsFinito
 
-    def __CalcComponenteFinito__(self, GSF, quant_atend):
-        # GSF - trabalha com os componentes finitos
-        # estruturar pra receber N componentes finitos com n atendentes e retornar um dicionarios com a estrutura e variáveis necessárias
-        quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-        tempo_chegada = 0
-        tempo_saida = 0
-        tempo_ocioso_individual_atendente = [] # verificar a quant de atendentes
-        disponibilidade_individual_atendente = []
-        for atend in range(0, quant_atend):
-            tempo_ocioso_individual_atendente.append(0)
-            disponibilidade_individual_atendente.append(0) # 0 free 1 occuped
-        tempo_ocioso_media = sum(tempo_ocioso_individual_atendente) / quant_atend # sum soma dos vetores
-        tempo_permanencia = tempo_saida - tempo_chegada
-        media_permanencia = tempo_permanencia / quantidade_entidades
-        return {}
+    def __CalcComponenteFinito__(self, comps_finito, entidade, modelo):
+        chave_comps_finito = entidade[3][1]
+        chave_entidade = entidade[5]
+        
+        print("\nentidade: ", entidade)
+        componente = comps_finito.get(entidade[3][1])
+        print("\ncomponente: ", componente)
+        estatisticas_componente = componente.get('estatistica_por_atendente')
+        print("\nestatisticas_componente: ", estatisticas_componente)
+        
+        posicoes = 0
+        
+        for disponivel in estatisticas_componente.get('fica_disponivel_em'):
+            if disponivel < entidade[0]: 
+                tmp_ent_atual = entidade[0]
+                tempo_ocioso = estatisticas_componente.get('tempo_ocioso')[posicoes]
+                tempo_ocioso = tmp_ent_atual - tempo_ocioso
+                estatisticas_componente.get('tempo_ocioso')[posicoes] += tempo_ocioso
+            elif tmp_prox_atendente_disp > estatisticas_atendimento.get('fica_disponivel_em')[posicoes]:
+                    tmp_prox_atendente_disp = estatisticas_atendimento.get('fica_disponivel_em')[posicoes]
+                    prox_atendente_disp = posicoes
+            posicoes += 1
+        
+
+
+        
+        return [chave_comps_finito, comps_finito, chave_entidade, entidade]
 
     
 
@@ -131,7 +173,7 @@ class Simulador:
 
         return config_compsInfinito
 
-    def __CalcComponenteInfinito__(self, GSI):
+    def __CalcComponenteInfinito__(self, comps_infinito, entidades):
         # GSI - trabalha com os componentes infinitos
         quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
         tempo_chegada = 0
@@ -142,7 +184,7 @@ class Simulador:
 
 
     # OUT - trabalha com os componentes de saída
-    def __componenteSaida__(self, OUT):
+    def __componenteSaida__(self, comps_saida, entidades):
 
         return {}
 
