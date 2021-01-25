@@ -115,20 +115,26 @@ class Simulador:
     #     tempo_gasto = 0 # por entidade
     #     return {}
     
-    def __CalcFila__(self, filas, entidade, modelo):
+    def __CalcFila__(self, filas, comps_finito, entidade, modelo):
         chave_fila = entidade[2][1]
         chave_entidade = entidade[4]
-        # print("\nEntidade: ", entidade)
+
         fila = modelo[entidade[2][0]].get(entidade[2][1])
-        # print("\nfila: ", fila)
-        atendimento = modelo[fila.get('destino')[0]].get(fila.get('destino')[1])
-        print("\nAtendimento: ", atendimento)
-        estatisticas_atendimento = atendimento.get('estatistica_por_atendente')
-        # print("\nEstatisticas por atendente: ", estatisticas_atendimento, "\n")
+        destino_fila = fila.get('destino')[1]
+        fila.get('estatisticas')[0] += 1
+
+        atendente = comps_finito.get(destino_fila)
+        estatisticas_atendimento = atendente.get('estatistica_por_atendente')
+
+        #print("\nEntidade: ", entidade)
+        
+        #print("\nfila: ", fila)
+
+        #print("\nAtendimento: ", atendente)
+        #print("\nEstatisticas por atendente: ", estatisticas_atendimento, "\n")
         
         entidade[1] = entidade[2][1]
         entidade[2] = [fila.get('destino')[0], fila.get('destino')[1]]
-        fila.get('estatisticas')[0] += 1
         
         posicoes = 0
         prox_atendente_disp = 0
@@ -215,14 +221,16 @@ class Simulador:
 
         return [chave_comps_infinito, componente, chave_entidade, entidade]
     
-    def __CalcComponenteSaida__(self, comps_saida, entidade, modelo):
+    def __CalcComponenteSaida__(self, comps_saida, entidade):
         chave_saida = entidade[2][1]
         chave_entidade = entidade[4]
-        saida = modelo[entidade[2][0]].get(entidade[2][1])
+        saida = comps_saida.get(entidade[2][1])
 
-        comps_saida.get('estatisticas')[0] += 1
-        comps_saida.get('estatisticas')[1] += entidade[3]
-        comps_saida.get('estatisticas')[3] = comps_saida.get('estatisticas')[1] / comps_saida.get('estatisticas')[0]
+        print(saida)
+
+        saida.get('estatisticas')[0] += 1
+        saida.get('estatisticas')[1] += entidade[3]
+        saida.get('estatisticas')[2] = saida.get('estatisticas')[1] / saida.get('estatisticas')[0]
 
         return [chave_saida, saida, chave_entidade, entidade]
 

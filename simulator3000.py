@@ -59,7 +59,7 @@ while (tempo_simulado < modelo['tempo_simulacao']):
         roteadores, entidade_atual = s3000.__roteando_rota__(roteadores, entidade_atual)
     
     elif destino_entidade == 'fila':
-        vector = s3000.__CalcFila__(filas, entidade_atual, modelo)
+        vector = s3000.__CalcFila__(filas, componentes_finito, entidade_atual, modelo)
         filas[vector[0]] = vector[1]
         entidades[vector[2]] = vector[3]
     
@@ -74,9 +74,9 @@ while (tempo_simulado < modelo['tempo_simulacao']):
         entidades[vector[2]] = vector[3]
 
     elif destino_entidade == 'componentes_saida':
-        vector = s3000.__CalcFila__(componentes_saida, entidade_atual, modelo)
+        vector = s3000.__CalcComponenteSaida__(componentes_saida, entidade_atual)
         componentes_saida[vector[0]] = vector[1]
-        # entidades.pop(vector[2])
+        entidades.pop(vector[2])
         break
 
 pprint(modelo)
