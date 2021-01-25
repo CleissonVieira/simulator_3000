@@ -105,8 +105,6 @@ class Simulador:
             config_compsFinito_x = config_compsFinito.get(comp_finito)
             comp_f = []
             comp_f.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-            comp_f.append(0) # tempo_chegada ++
-            comp_f.append(0) # tempo_saida ++
             comp_f.append(0) # tempo_ocioso_media
             comp_f.append(0) # tempo_permanencia
             comp_f.append(0) # media_permanencia
@@ -131,30 +129,41 @@ class Simulador:
     def __CalcComponenteFinito__(self, comps_finito, entidade, modelo):
         chave_comps_finito = entidade[3][1]
         chave_entidade = entidade[5]
-        
-        print("\nentidade: ", entidade)
         componente = comps_finito.get(entidade[3][1])
-        print("\ncomponente: ", componente)
         estatisticas_componente = componente.get('estatistica_por_atendente')
-        print("\nestatisticas_componente: ", estatisticas_componente)
-        
+
         posicoes = 0
         
         for disponivel in estatisticas_componente.get('fica_disponivel_em'):
-            if disponivel < entidade[0]: 
+            if disponivel <= entidade[0]:
                 tmp_ent_atual = entidade[0]
                 tempo_ocioso = estatisticas_componente.get('tempo_ocioso')[posicoes]
                 tempo_ocioso = tmp_ent_atual - tempo_ocioso
-                estatisticas_componente.get('tempo_ocioso')[posicoes] += tempo_ocioso
-            elif tmp_prox_atendente_disp > estatisticas_atendimento.get('fica_disponivel_em')[posicoes]:
-                    tmp_prox_atendente_disp = estatisticas_atendimento.get('fica_disponivel_em')[posicoes]
-                    prox_atendente_disp = posicoes
+                estatisticas_componente.get('tempo_ocioso')[posicoes] += tempo_ocioso 
+                break
             posicoes += 1
         
+        interval = componente.get('intervalo_gasto')
+        temp_gasto = random.randint(interval[0], interval[1])
 
+        entidade[0] += temp_gasto
+        entidade[2] = entidade[3][1]
+        entidade[3] = [componente.get('destino')[0], componente.get('destino')[1]]
+        entidade[4] += temp_gasto
 
+        componente.get('estatisticas')[0] += 1
+        componente.get('estatisticas')[2] += temp_gasto
+        componente.get('estatisticas')[3] = componente.get('estatisticas')[2] / componente.get('estatisticas')[0]
+
+        estatisticas_componente.get('fica_disponivel_em')[posicoes] = entidade[0]
+
+        print("\nentidade: ", entidade)
         
-        return [chave_comps_finito, comps_finito, chave_entidade, entidade]
+        print("\ncomponente: ", componente)
+        
+        print("\nestatisticas_componente: ", estatisticas_componente)
+        
+        return [chave_comps_finito, componente, chave_entidade, entidade]
 
     
 

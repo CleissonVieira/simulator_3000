@@ -19,7 +19,7 @@ if modelo['fila']:
     pprint(filas)
 
 if modelo['componentes_finito']:
-    # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=tmp chegada | [2]=tmp saida | [3]=media de tmp ocioso | [4]=tmp permanencia | [5]=media permanencia, atendentes: tempo osioso p/ atendente [] | disponibilidade de cada atendente []
+    # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=media de tmp ocioso | [2]=tmp permanencia | [3]=media permanencia, atendentes: tempo osioso p/ atendente [] | disponibilidade de cada atendente []
     componentes_finito = s3000.__StructComponenteFinito__(modelo['componentes_finito'])
     pprint(componentes_finito)
 
@@ -66,7 +66,8 @@ while (count < modelo['tempo_simulacao']):
         componentes_saida, entidade_atual = s3000.__componenteSaida__(componentes_saida, entidade_atual)
 
 
-# pprint(modelo)
+pprint(modelo)
+# print("\n")
 # pprint(entidades)
 
 
