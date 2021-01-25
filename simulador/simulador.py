@@ -41,15 +41,12 @@ class Simulador:
         tempo_gasto = 0 # por entidade
         return {}
 
-
     # ROT - trabalha com o roteamento das entidades
     def __roteando_rota__(self, roteadores, entidades):
         return {}
 
-
     # QUE - trabalha com as filas das entidades
-    def __StructFila__(self, config_fila):
-          
+    def __StructFila__(self, config_fila):          
         for fila in config_fila:
             fila_x = config_fila.get(fila)
             fila = []
@@ -61,6 +58,59 @@ class Simulador:
 
         return config_fila
 
+    # GSF - trabalha com os componentes finitos
+    def __StructComponenteFinito__(self, config_compsFinito):
+        
+        for comp_finito in config_compsFinito:
+            config_compsFinito_x = config_compsFinito.get(comp_finito)
+            comp_f = []
+            comp_f.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
+            comp_f.append(0) # tempo_ocioso_media
+            comp_f.append(0) # tempo_permanencia
+            comp_f.append(0) # media_permanencia
+            config_compsFinito_x["estatisticas"] = comp_f
+
+            n_atendentes = config_compsFinito.get(comp_finito).get('n_atendentes')
+            atendentes = {}
+            tempo_ocioso_individual_atendente = []
+            disponibilidade_individual_atendente = []
+            fica_disponivel_em = []
+            for atend in range(0, n_atendentes):
+                tempo_ocioso_individual_atendente.append(0)
+                disponibilidade_individual_atendente.append(True)
+                fica_disponivel_em.append(0)
+            
+            atendentes['tempo_ocioso'] = tempo_ocioso_individual_atendente
+            atendentes['disponibilidade'] = disponibilidade_individual_atendente
+            atendentes['fica_disponivel_em'] = fica_disponivel_em
+            config_compsFinito_x['estatistica_por_atendente'] = atendentes
+        return config_compsFinito
+
+    # GSI - trabalha com os componentes infinitos
+    def __StructComponenteInfinito__(self, config_compsInfinito):
+ 
+        for comp_finito in config_compsInfinito:
+            config_compsInfinito_x = config_compsInfinito.get(comp_finito)
+            comp_inf = []
+            comp_inf.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
+            comp_inf.append(0) # tempo_permanencia
+            comp_inf.append(0) # media_permanencia
+            config_compsInfinito_x["estatisticas"] = comp_inf
+
+        return config_compsInfinito
+
+    # OUT - trabalha com os componentes de saída
+    def __StructSaida__(self, config_saida):
+        for saida in config_saida:
+            saida_x = config_saida.get(saida)
+            saida = []
+            saida.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela saida
+            saida.append(0) # tempo_espera = tempo_saida - tempo_chegada
+            saida.append(0) # media_espera = tempo_espera / quantidade_entidades
+            saida_x["estatisticas"] = saida
+
+        return config_saida
+        
     def __CalcFila__(self, filas, entidade, modelo):
         chave_fila = entidade[3][1]
         chave_entidade = entidade[5]
@@ -97,35 +147,6 @@ class Simulador:
         
         return [chave_fila, fila, chave_entidade, entidade]
 
-
-    # GSF - trabalha com os componentes finitos
-    def __StructComponenteFinito__(self, config_compsFinito):
-        
-        for comp_finito in config_compsFinito:
-            config_compsFinito_x = config_compsFinito.get(comp_finito)
-            comp_f = []
-            comp_f.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-            comp_f.append(0) # tempo_ocioso_media
-            comp_f.append(0) # tempo_permanencia
-            comp_f.append(0) # media_permanencia
-            config_compsFinito_x["estatisticas"] = comp_f
-
-            n_atendentes = config_compsFinito.get(comp_finito).get('n_atendentes')
-            atendentes = {}
-            tempo_ocioso_individual_atendente = []
-            disponibilidade_individual_atendente = []
-            fica_disponivel_em = []
-            for atend in range(0, n_atendentes):
-                tempo_ocioso_individual_atendente.append(0)
-                disponibilidade_individual_atendente.append(True)
-                fica_disponivel_em.append(0)
-            
-            atendentes['tempo_ocioso'] = tempo_ocioso_individual_atendente
-            atendentes['disponibilidade'] = disponibilidade_individual_atendente
-            atendentes['fica_disponivel_em'] = fica_disponivel_em
-            config_compsFinito_x['estatistica_por_atendente'] = atendentes
-        return config_compsFinito
-
     def __CalcComponenteFinito__(self, comps_finito, entidade, modelo):
         chave_comps_finito = entidade[3][1]
         chave_entidade = entidade[5]
@@ -157,42 +178,34 @@ class Simulador:
 
         estatisticas_componente.get('fica_disponivel_em')[posicoes] = entidade[0]
 
-        print("\nentidade: ", entidade)
+        # print("\nentidade: ", entidade)
         
-        print("\ncomponente: ", componente)
+        # print("\ncomponente: ", componente)
         
-        print("\nestatisticas_componente: ", estatisticas_componente)
+        # print("\nestatisticas_componente: ", estatisticas_componente)
         
         return [chave_comps_finito, componente, chave_entidade, entidade]
 
+    def __CalcComponenteInfinito__(self, comps_infinito, entidade, modelo):
+        
+        chave_comps_infinito = entidade[3][1]
+        chave_entidade = entidade[5]
+        componente = comps_infinito.get(entidade[3][1])
+
+        interval = componente.get('intervalo_gasto')
+        temp_gasto = random.randint(interval[0], interval[1])
+
+        entidade[0] += temp_gasto
+        entidade[2] = entidade[3][1]
+        entidade[3] = [componente.get('destino')[0], componente.get('destino')[1]]
+        entidade[4] += temp_gasto
+
+        componente.get('estatisticas')[0] += 1
+        componente.get('estatisticas')[1] += temp_gasto
+        componente.get('estatisticas')[2] = componente.get('estatisticas')[2] / componente.get('estatisticas')[0]
+
+        return [chave_comps_infinito, componente, chave_entidade, entidade]
     
-
-    # GSI - trabalha com os componentes infinitos
-    def __StructComponenteInfinito__(self, config_compsInfinito):
-        # 
-        for comp_finito in config_compsInfinito:
-            config_compsInfinito_x = config_compsInfinito.get(comp_finito)
-            comp_inf = []
-            comp_inf.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-            comp_inf.append(0) # tempo_chegada ++
-            comp_inf.append(0) # tempo_saida ++
-            comp_inf.append(0) # tempo_permanencia
-            comp_inf.append(0) # media_permanencia
-            config_compsInfinito_x["estatisticas"] = comp_inf
-
-        return config_compsInfinito
-
-    def __CalcComponenteInfinito__(self, comps_infinito, entidades):
-        # GSI - trabalha com os componentes infinitos
-        quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-        tempo_chegada = 0
-        tempo_saida = 0
-        tempo_permanencia = tempo_saida - tempo_chegada
-        media_permanencia = tempo_permanencia / quantidade_entidades
-        return {}
-
-
-    # OUT - trabalha com os componentes de saída
     def __componenteSaida__(self, comps_saida, entidades):
 
         return {}

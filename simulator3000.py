@@ -24,7 +24,7 @@ if modelo['componentes_finito']:
     pprint(componentes_finito)
 
 if modelo['componentes_infinito']:
-    # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=tmp chegada | [2]=tmp saida | [3]=tmp permanencia | [4]=media permanencia
+    # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=tmp permanencia | [2]=media permanencia
     componentes_infinito = s3000.__StructComponenteInfinito__(modelo['componentes_infinito'])
     pprint(componentes_infinito)
 
@@ -41,32 +41,38 @@ if modelo['componentes_saida']:
 
 print("\n\n\nSIMULAÇAO A PARTIR DESSE PONTO: \n")
 
-count = 0
-while (count < modelo['tempo_simulacao']):
+tempo_simulado = 0
+while (tempo_simulado < modelo['tempo_simulacao']):
     for item in sorted(entidades, key = entidades.get):
         entidade_atual = entidades[item]
         break
     
-    count = entidade_atual[0]
+    tempo_simulado = entidade_atual[0]
 
     if entidade_atual[3][0] == 'roteadores':
         roteadores, entidade_atual = s3000.__roteando_rota__(roteadores, entidade_atual)
+    
     elif entidade_atual[3][0] == 'fila':
         vector = s3000.__CalcFila__(filas, entidade_atual, modelo)
         filas[vector[0]] = vector[1]
         entidades[vector[2]] = vector[3]
+    
     elif entidade_atual[3][0] == 'componentes_finito':
         vector = s3000.__CalcComponenteFinito__(componentes_finito, entidade_atual, modelo)
         componentes_finito[vector[0]] = vector[1]
         entidades[vector[2]] = vector[3]
         break
+    
     elif entidade_atual[3][0] == 'componentes_infinito':
-        componentes_infinito, entidade_atual = s3000.__CalcComponenteInfinito__(componentes_infinito, entidade_atual)
+        vector = s3000.__CalcComponenteInfinito__(componentes_infinito, entidade_atual, modelo)
+        componentes_infinito[vector[0]] = vector[1]
+        entidades[vector[2]] = vector[3]
+
     elif entidade_atual[3][0] == 'componentes_saida':
         componentes_saida, entidade_atual = s3000.__componenteSaida__(componentes_saida, entidade_atual)
 
 
-pprint(modelo)
+#pprint(modelo)
 # print("\n")
 # pprint(entidades)
 
