@@ -31,7 +31,7 @@
         },
         "atendMedico": {
             "origem": "filaMedico",
-            "destino": ["componentes_finito", "atendCaixa"],
+            "destino": ["componentes_saida", "saida"],
             "n_atendentes": 3,
             "intervalo_gasto": [7,15]
         }
