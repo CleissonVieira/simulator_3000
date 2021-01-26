@@ -1,0 +1,33 @@
+Resultados da Simulação: 
+
+Dados do componente finito (atendCaixa):
+
+Ociosidade individual por servidor: 
+Servidor 1: 168 minutos
+Servidor 2: 167 minutos
+Média da ociosidade: 167.50 minutos
+Tempo médio de atendimento das ETs: 4.34
+
+Dados do componente finito (atendMedico):
+
+Ociosidade individual por servidor: 
+Servidor 1: 172 minutos
+Servidor 2: 158 minutos
+Servidor 3: 157 minutos
+Média da ociosidade: 162.33 minutos
+Tempo médio de atendimento das ETs: 11.03
+
+Dados da fila (filaCaixa):
+
+Quantidade média de Entidades Temporárias: 47.38
+Tempo médio de espera: 2.37 minutos
+Tempo máximo de espera: 7.00 minutos
+
+Dados da fila (filaMedico):
+
+Quantidade média de Entidades Temporárias: 2.98
+Tempo médio de espera: 5.90 minutos
+Tempo máximo de espera: 13.00 minutos
+
+Total de entidades temporarias que entraram e sairam do modelo: 122
+Tempo médio de permanencia das ETs no modelo: 27.34 minutos

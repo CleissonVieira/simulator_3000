@@ -4,6 +4,7 @@ from pprint import pprint
 from src.modelador import Modelador
 from src.simulador import Simulador
 from src.analisador import Analisador
+import os
 
 m3000 = Modelador()
 s3000 = Simulador()
@@ -42,15 +43,11 @@ if modelo['componente_saida']:
     componentes_saidas = m3000.__StructSaida__(modelo['componente_saida'])
     #pprint(componentes_saidas)
 
-# Verificar nos componentes se Origem da entidade é != do próprio componente onde chegou, então verificar se é origem da saída e eliminar x entidade
-
-
 #print("\n\n\nSIMULAÇAO A PARTIR DESSE PONTO: \n")
 
 tempo_simulado = 0
 while (tempo_simulado < modelo['tempo_simulacao']):
     entidade_atual = []
-
 
     for item in sorted(entidades, key = entidades.get):
         entidade_atual = entidades[item]
@@ -93,8 +90,13 @@ if tempo_simulado >= modelo['tempo_simulacao']:
     componentes_finitos = s3000.__CalcOciosidadeFinal__(componentes_finitos, tempo_simulado)
 
 
+fileName = open("simulacao.txt", "w")
+fileName.writelines("Resultados da Simulação: ")
 print("Resultados da Simulação:")
 
-a3000.__ResultsComponenteFinito__(componentes_finitos)
-a3000.__ResultsComponenteFila__(componentes_filas)
-a3000.__ResultsComponenteSaida__(componentes_saidas)
+a3000.__ResultsComponenteFinito__(componentes_finitos, fileName)
+a3000.__ResultsComponenteFila__(componentes_filas, fileName)
+a3000.__ResultsComponenteSaida__(componentes_saidas, fileName)
+
+fileName.close()
+
