@@ -32,8 +32,10 @@ class Analisador:
         for fila in filas:
             dados_fila = filas.get(fila).get('estatisticas')
 
-            print(dados_fila)
+            print("\nDados da fila (" + fila + "):\n")
 
+            print("Tempo médio de espera: {:0.2f} minutos" .format(dados_fila[2]))
+            print("Tempo máximo de espera: {:0.2f} minutos" .format(dados_fila[3]))
 
     def __del__(self):
         del self

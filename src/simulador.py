@@ -7,13 +7,8 @@ class Simulador:
     
     # MÉTODOS DO SIMULADOR
 
-
-    # def __CalcEntidade__(self):
-    #     # trabalha com as entidades
-    #     localizacao = "gerador_entidades_temporarias"
-    #     destino = ""
-    #     tempo_gasto = 0 # por entidade
-    #     return {}
+    def __CalcMediaFila__(self, filas):
+        pass
     
     def __CalcFila__(self, filas, comps_finito, entidade, modelo):
         chave_fila = entidade[2][1]
