@@ -21,23 +21,17 @@ class Simulador:
 
         fila = filas.get(chave_fila)
 
-        print("\nfila: ", fila)
+        # print("\nfila: ", fila)
 
-
-        destino_fila = fila.get('destino')[1]
+        destino_fila = fila.get('destino')
         fila.get('estatisticas')[0] += 1
 
-        atendente = comps_finito.get(destino_fila)
-        estatisticas_atendimento = atendente.get('estatistica_por_atendente')
+        estatisticas_atendimento = comps_finito.get(destino_fila[1]).get('estatistica_por_atendente')
 
-        #print("\nEntidade: ", entidade)
-        
-
-        #print("\nAtendimento: ", atendente)
-        #print("\nEstatisticas por atendente: ", estatisticas_atendimento, "\n")
+        # print("\nEstatisticas por atendente: ", estatisticas_atendimento, "\n")
         
         entidade[1] = entidade[2][1]
-        entidade[2] = [fila.get('destino')[0], fila.get('destino')[1]]
+        entidade[2] = [destino_fila[0], destino_fila[1]]
         
         pos = 0
         prox_atendente_disp = 0
@@ -45,16 +39,15 @@ class Simulador:
         
         for disponivel in estatisticas_atendimento.get('fica_disponivel_em'):
             if disponivel <= entidade[0]: 
-                fila.get('estatisticas')[2] = fila.get('estatisticas')[1]/fila.get('estatisticas')[0]
                 return [chave_fila, fila, chave_entidade, entidade]
             elif tmp_prox_atendente_disp > estatisticas_atendimento.get('fica_disponivel_em')[pos]:
                     tmp_prox_atendente_disp = estatisticas_atendimento.get('fica_disponivel_em')[pos]
                     prox_atendente_disp = pos
             pos += 1
         
-        entidade[0] = tmp_prox_atendente_disp
 
         tmp_espera = (estatisticas_atendimento.get('fica_disponivel_em')[prox_atendente_disp]-entidade[0])
+        entidade[0] = tmp_prox_atendente_disp
         fila.get('estatisticas')[1] += tmp_espera
         fila.get('estatisticas')[2] = fila.get('estatisticas')[1]/fila.get('estatisticas')[0]
         if fila.get('estatisticas')[3] < tmp_espera:
@@ -78,7 +71,6 @@ class Simulador:
         entidade[2] = [destino_final[0], destino_final[1]]
 
         return entidade
-
 
     def __CalcComponenteFinito__(self, comps_finito, entidade, modelo):
         chave_comps_finito = entidade[2][1]
