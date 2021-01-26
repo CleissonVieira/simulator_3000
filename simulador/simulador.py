@@ -8,7 +8,7 @@ class Simulador:
     # MÉTODOS DO MODELADOR
 
     # SRC - trabalha com os geradores de entidades temporárias
-    def __GeradorEntidades__(self, config_entidade):
+    def __StructGerador__(self, config_entidade):
         init = config_entidade.get('intervalo_tempo_de_operação')[0]
         end = config_entidade.get('intervalo_tempo_de_operação')[1]
         interval = config_entidade.get('intervalo_entre_geracao')
@@ -35,8 +35,19 @@ class Simulador:
         return entidades_temporaria
 
     # ROT - trabalha com o roteamento das entidades
-    def __roteando_rota__(self, roteadores, entidades):
-        #aqui tem que ser feito ainda
+    def __StructRoteador__(self, config_roteadores):
+        for comp_roteador in config_roteadores:
+            comp_roteador_x = config_roteadores.get(comp_roteador)
+            comp_r = []
+
+            tam = len(comp_roteador_x.get('destinos'))
+            print("olha o tamanho",tam)
+
+            #for i in 
+            # comp_r.append(0)
+            # comp_r.append(0)
+            # comp_r.append(0)
+            break
         return {}
 
     # QUE - trabalha com as filas das entidades

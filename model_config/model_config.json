@@ -1,46 +1,50 @@
 {
     "tempo_simulacao": 80,
 
-    "gerador_entidades_temporarias": {
-        "destino": ["fila","filaCaixa"],
+    "componente_gerador": {
+        "destino": ["componente_fila","filaCaixa"],
         "limite": 1000,
         "intervalo_tempo_de_operação": [3,21],
         "intervalo_entre_geracao": 2
     },
 
-    "roteadores": {
-    },
-
-    "fila": {
-        "filaCaixa": {
-            "origem": "gerador",
-            "destino": ["componentes_finito","atendCaixa"]
-        },
-        "filaMedico": {
+    "componente_roteador": {
+        "roteadorFilaCaixa": {
             "origem": "atendCaixa",
-            "destino": ["componentes_finito", "atendMedico"]
+            "destinos": [["fila","filaMedico", 80], ["componente_saida", "saida", 20]]
         }
     },
 
-    "componentes_finito": {
+    "componente_fila": {
+        "filaCaixa": {
+            "origem": "componente_gerador",
+            "destino": ["componente_roteador","roteadorFilaCaixa"]
+        },
+        "filaMedico": {
+            "origem": "atendCaixa",
+            "destino": ["componente_finito", "atendMedico"]
+        }
+    },
+
+    "componente_finito": {
         "atendCaixa": {
             "origem": "filaCaixa",
-            "destino": ["fila", "filaMedico"],
+            "destino": ["componente_fila", "filaMedico"],
             "n_atendentes": 2,
             "intervalo_gasto": [2,7]
         },
         "atendMedico": {
             "origem": "filaMedico",
-            "destino": ["componentes_saida", "saida"],
+            "destino": ["componente_saida", "saida"],
             "n_atendentes": 3,
             "intervalo_gasto": [7,15]
         }
     },
 
-    "componentes_infinito": {
+    "componente_infinito": {
     },
 
-    "componentes_saida": {
+    "componente_saida": {
         "saida": {
             "origem": "atendCaixa"
         }
