@@ -10,7 +10,12 @@ class Simulador:
     def __CalcOciosidadeFinal__(self, comps_finito, temp_simulacao):
         
         for comp in comps_finito:
-            print(comp)
+            ociosidade_ind = comps_finito.get(comp).get('estatistica_por_atendente').get('tempo_ocioso')
+            disponivel_em = comps_finito.get(comp).get('estatistica_por_atendente').get('fica_disponivel_em')
+            tempo_gasto = comps_finito.get(comp).get('estatistica_por_atendente').get('tempo_gasto')
+
+            for i in range(len(ociosidade_ind)):
+                ociosidade_ind[i] += (temp_simulacao - disponivel_em[i])
 
         return comps_finito
     
@@ -78,18 +83,14 @@ class Simulador:
         estatisticas_componente = componente.get('estatistica_por_atendente')
 
         posicoes = 0
-        
+        pos_menor = 0
+        menor_atend = 99999999
+
         for disponivel in estatisticas_componente.get('fica_disponivel_em'):
-            if disponivel <= entidade[0]:
-                tmp_ent_atual = entidade[0]
-                tempo_ocioso = estatisticas_componente.get('tempo_ocioso')[posicoes]
-                tempo_ocioso = tmp_ent_atual - tempo_ocioso
-                estatisticas_componente.get('tempo_ocioso')[posicoes] += tempo_ocioso 
-                break
+            if menor_atend > disponivel:
+                menor_atend = disponivel
+                pos_menor = posicoes
             posicoes += 1
-        
-        if posicoes == componente.get('n_atendentes'):
-            posicoes -= 1
 
         interval = componente.get('intervalo_gasto')
         temp_gasto = rd.randint(interval[0], interval[1])
@@ -103,7 +104,8 @@ class Simulador:
         componente.get('estatisticas')[2] += temp_gasto
         componente.get('estatisticas')[3] = componente.get('estatisticas')[2] / componente.get('estatisticas')[0]
 
-        estatisticas_componente.get('fica_disponivel_em')[posicoes] = entidade[0]
+        estatisticas_componente.get('fica_disponivel_em')[pos_menor] = entidade[0]
+        estatisticas_componente.get('tempo_gasto')[pos_menor] += temp_gasto
 
         # print("\nentidade: ", entidade)
         

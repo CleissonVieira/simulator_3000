@@ -4,7 +4,7 @@
     "componente_gerador": {
         "destino": ["componente_fila","filaCaixa"],
         "limite": 1000,
-        "intervalo_tempo_de_operação": [3,21],
+        "intervalo_tempo_de_operação": [2, 244],
         "intervalo_entre_geracao": 2
     },
 

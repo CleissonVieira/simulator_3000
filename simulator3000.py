@@ -50,13 +50,15 @@ if modelo['componente_saida']:
 tempo_simulado = 0
 while (tempo_simulado < modelo['tempo_simulacao']):
     entidade_atual = []
+
+
     for item in sorted(entidades, key = entidades.get):
         entidade_atual = entidades[item]
         break
 
     if entidade_atual == []: #caso todas as entidades já tenham saido do modelo encerra a simulacao
+        print("tempo simulado \n\n\n", tempo_simulado)
         tempo_simulado = modelo['tempo_simulacao']
-        componentes_finitos = s3000.__CalcOciosidadeFinal__(componentes_finitos, tempo_simulado)
         break
     else:
         tempo_simulado = entidade_atual[0]
@@ -84,6 +86,9 @@ while (tempo_simulado < modelo['tempo_simulacao']):
         dados_alteracoes = s3000.__CalcComponenteSaida__(componentes_saidas, entidade_atual)
         componentes_saidas[dados_alteracoes[0]] = dados_alteracoes[1]
         entidades.pop(dados_alteracoes[2])
+
+if tempo_simulado >= modelo['tempo_simulacao']:
+    componentes_finitos = s3000.__CalcOciosidadeFinal__(componentes_finitos, tempo_simulado)
 
 
 print("Resultados da Simulação:")
