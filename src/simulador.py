@@ -1,4 +1,4 @@
-import random
+import random as rd
 
 class Simulador:
 
@@ -40,15 +40,19 @@ class Simulador:
             comp_roteador_x = config_roteadores.get(comp_roteador)
             comp_r = []
 
-            tam = len(comp_roteador_x.get('destinos'))
-            print("olha o tamanho",tam)
+            comp_r.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
 
-            #for i in 
-            # comp_r.append(0)
-            # comp_r.append(0)
-            # comp_r.append(0)
-            break
-        return {}
+            print(comp_roteador_x)
+
+            entidade_por_destino = []
+            for i in range(0, len(comp_roteador_x.get('destinos'))):
+                entidade_por_destino.append(0)
+
+            comp_r.append(entidade_por_destino) # entidade_por_saida = 1 #
+        
+            comp_roteador_x["estatisticas"] = comp_r
+            
+        return config_roteadores
 
     # QUE - trabalha com as filas das entidades
     def __StructFila__(self, config_fila):          
@@ -191,7 +195,7 @@ class Simulador:
             posicoes -= 1
 
         interval = componente.get('intervalo_gasto')
-        temp_gasto = random.randint(interval[0], interval[1])
+        temp_gasto = rd.randint(interval[0], interval[1])
 
         entidade[0] += temp_gasto
         entidade[1] = entidade[2][1]

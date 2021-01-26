@@ -1,7 +1,7 @@
 import json
 import random
 from pprint import pprint
-from simulador.simulador import Simulador
+from src.simulador import Simulador
 
 with open('model_config/model_config.json', 'r') as json_file:
     modelo = json.load(json_file)
@@ -17,7 +17,12 @@ if modelo['componente_gerador']:
 if modelo['componente_fila']:
     componentes_filas = s3000.__StructFila__(modelo['componente_fila'])
     pprint(componentes_filas)
-    
+
+# origem, destinos [], estatísticas: [0]=qtd entidades | [1]=qtd entidades cada destino []
+if modelo['componente_roteador']:
+    componentes_roteadores = s3000.__StructRoteador__(modelo['componente_roteador'])
+    pprint(componentes_roteadores)
+
 # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=media de tmp ocioso | [2]=tmp permanencia | [3]=media permanencia, atendentes: tempo osioso p/ atendente [] | disponibilidade de cada atendente []
 if modelo['componente_finito']:
     componentes_finitos = s3000.__StructComponenteFinito__(modelo['componente_finito'])
@@ -28,9 +33,7 @@ if modelo['componente_infinito']:
     componentes_infinitos = s3000.__StructComponenteInfinito__(modelo['componente_infinito'])
     pprint(componentes_infinitos)
 
-if modelo['componente_roteador']:
-    componentes_roteadores = s3000.__StructRoteador__(modelo['componente_roteador'])
-    pprint(componentes_roteadores)
+
     
 
 # origem, estatísticas: [0]=qtd entidades | [1]=tmp total | [2]=media tempo no modelo
