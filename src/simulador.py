@@ -20,7 +20,6 @@ class Simulador:
 
         return filas
 
-
     def __CalcOciosidadeFinal__(self, comps_finito, temp_simulacao):
         
         for comp in comps_finito:
