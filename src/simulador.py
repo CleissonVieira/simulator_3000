@@ -19,7 +19,11 @@ class Simulador:
         chave_fila = entidade[2][1]
         chave_entidade = entidade[4]
 
-        fila = modelo[entidade[2][0]].get(entidade[2][1])
+        fila = filas.get(chave_fila)
+
+        print("\nfila: ", fila)
+
+
         destino_fila = fila.get('destino')[1]
         fila.get('estatisticas')[0] += 1
 
@@ -28,7 +32,6 @@ class Simulador:
 
         #print("\nEntidade: ", entidade)
         
-        #print("\nfila: ", fila)
 
         #print("\nAtendimento: ", atendente)
         #print("\nEstatisticas por atendente: ", estatisticas_atendimento, "\n")
@@ -58,6 +61,24 @@ class Simulador:
             fila.get('estatisticas')[3] = tmp_espera
         
         return [chave_fila, fila, chave_entidade, entidade]
+
+    def __CalcRoteador__(self, roteadores, entidade):
+        roteador = roteadores.get(entidade[2][1])
+
+        pesos =[]
+
+        pop = roteador.get('destinos')
+        pesos = roteador.get('probabilidades_destinos')
+
+        destino_final = rd.choices(pop, pesos)[0]
+
+        # print("destino",destino_final)
+
+        entidade[1] = entidade[2][1]
+        entidade[2] = [destino_final[0], destino_final[1]]
+
+        return entidade
+
 
     def __CalcComponenteFinito__(self, comps_finito, entidade, modelo):
         chave_comps_finito = entidade[2][1]

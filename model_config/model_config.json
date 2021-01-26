@@ -1,5 +1,5 @@
 {
-    "tempo_simulacao": 80,
+    "tempo_simulacao": 480,
 
     "componente_gerador": {
         "destino": ["componente_fila","filaCaixa"],
@@ -10,15 +10,16 @@
 
     "componente_roteador": {
         "roteadorFilaCaixa": {
-            "origem": "atendCaixa",
-            "destinos": [["fila","filaMedico", 80], ["componente_saida", "saida", 20]]
+            "origem": "atendMedico",
+            "destinos": [["componente_fila","filaCaixa"], ["componente_saida", "saida"]],
+            "probabilidades_destinos": [40, 60]
         }
     },
 
     "componente_fila": {
         "filaCaixa": {
             "origem": "componente_gerador",
-            "destino": ["componente_roteador","roteadorFilaCaixa"]
+            "destino": ["componente_finito","atendCaixa"]
         },
         "filaMedico": {
             "origem": "atendCaixa",
@@ -35,7 +36,7 @@
         },
         "atendMedico": {
             "origem": "filaMedico",
-            "destino": ["componente_saida", "saida"],
+            "destino": ["componente_roteador", "roteadorFilaCaixa"],
             "n_atendentes": 3,
             "intervalo_gasto": [7,15]
         }

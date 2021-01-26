@@ -1,15 +1,20 @@
 import json
 import random
 from pprint import pprint
-from src.modelaador import Modelador as m3000
-from src.simulador import Simulador as s3000
-from src.analisador import Analisador as a3000
+from src.modelador import Modelador
+from src.simulador import Simulador
+from src.analisador import Analisador
+
+m3000 = Modelador()
+s3000 = Simulador()
+a3000 = Analisador()
 
 with open('model_config/model_config.json', 'r') as json_file:
     modelo = json.load(json_file)
 
 # [0]=tempo gerado | [1]=localização | [2]=destino | [3]=tempo gasto | [4]=chave dict
 if modelo['componente_gerador']:
+    print('dedede')
     entidades = m3000.__StructGerador__(modelo['componente_gerador'])
     pprint(entidades)
 
@@ -31,10 +36,7 @@ if modelo['componente_finito']:
 # origem, destino, intervalo_gasto, estatísticas: [0]=qtd entidades | [1]=tmp permanencia | [2]=media permanencia
 if modelo['componente_infinito']:
     componentes_infinitos = m3000.__StructComponenteInfinito__(modelo['componente_infinito'])
-    pprint(componentes_infinitos)
-
-
-    
+    pprint(componentes_infinitos)   
 
 # origem, estatísticas: [0]=qtd entidades | [1]=tmp total | [2]=media tempo no modelo
 if modelo['componente_saida']:
@@ -46,53 +48,51 @@ if modelo['componente_saida']:
 
 print("\n\n\nSIMULAÇAO A PARTIR DESSE PONTO: \n")
 
-# tempo_simulado = 0
-# while (tempo_simulado < modelo['tempo_simulacao']):
-#     entidade_atual = []
-#     for item in sorted(entidades, key = entidades.get):
-#         entidade_atual = entidades[item]
-#         break
+tempo_simulado = 0
+while (tempo_simulado < modelo['tempo_simulacao']):
+    entidade_atual = []
+    for item in sorted(entidades, key = entidades.get):
+        entidade_atual = entidades[item]
+        break
 
-#     if entidade_atual == []:
-#         tempo_simulado = modelo['tempo_simulacao']
-#         break
-#     else:
-#         tempo_simulado = entidade_atual[0]
-#         destino_entidade = entidade_atual[2][0]
+    if entidade_atual == []:
+        tempo_simulado = modelo['tempo_simulacao']
+        break
+    else:
+        tempo_simulado = entidade_atual[0]
+        destino_entidade = entidade_atual[2][0]   
 
-#     print(tempo_simulado)
-#     print('\n')
-#     print(entidade_atual)
-        
-
-#     if destino_entidade == 'componente_roteador':
-#         componentes_roteadores, entidade_atual = s3000.__roteando_rota__(componentes_roteadores, entidade_atual)
+    if destino_entidade == 'componente_fila':
+        vector = s3000.__CalcFila__(componentes_filas, componentes_finitos, entidade_atual, modelo)
+        componentes_filas[vector[0]] = vector[1]
+        entidades[vector[2]] = vector[3]
     
-#     elif destino_entidade == 'componente_fila':
-#         vector = s3000.__CalcFila__(componentes_filas, componentes_finitos, entidade_atual, modelo)
-#         componentes_filas[vector[0]] = vector[1]
-#         entidades[vector[2]] = vector[3]
+    elif destino_entidade == 'componente_roteador':
+        entidades[entidade_atual[4]] = s3000.__CalcRoteador__(componentes_roteadores, entidade_atual)
+
+    elif destino_entidade == 'componente_finito':
+        vector = s3000.__CalcComponenteFinito__(componentes_finitos, entidade_atual, modelo)
+        componentes_finitos[vector[0]] = vector[1]
+        entidades[vector[2]] = vector[3]
     
-#     elif destino_entidade == 'componente_finito':
-#         vector = s3000.__CalcComponenteFinito__(componentes_finitos, entidade_atual, modelo)
-#         componentes_finitos[vector[0]] = vector[1]
-#         entidades[vector[2]] = vector[3]
-    
-#     elif destino_entidade == 'componente_infinito':
-#         vector = s3000.__CalcComponenteInfinito__(componentes_infinitos, entidade_atual, modelo)
-#         componentes_infinitos[vector[0]] = vector[1]
-#         entidades[vector[2]] = vector[3]
+    elif destino_entidade == 'componente_infinito':
+        vector = s3000.__CalcComponenteInfinito__(componentes_infinitos, entidade_atual, modelo)
+        componentes_infinitos[vector[0]] = vector[1]
+        entidades[vector[2]] = vector[3]
 
-#     elif destino_entidade == 'componente_saida':
-#         vector = s3000.__CalcComponenteSaida__(componentes_saidas, entidade_atual)
-#         componentes_saidas[vector[0]] = vector[1]
-#         entidades.pop(vector[2])
-#         pprint(entidades)
+    elif destino_entidade == 'componente_saida':
+        vector = s3000.__CalcComponenteSaida__(componentes_saidas, entidade_atual)
+        componentes_saidas[vector[0]] = vector[1]
+        entidades.pop(vector[2])
 
-        
-
-#pprint(modelo)
-# print("\n")
+pprint(modelo)
+print("\n")
+pprint(entidades)
 
 
+print("\n\n\nResultados da Simulação:\n")
 
+a3000.__ResultsComponenteFinito__(componentes_finitos)
+
+pprint(componentes_filas)
+a3000.__ResultsComponenteFila__(componentes_filas)
