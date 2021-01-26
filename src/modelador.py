@@ -1,8 +1,4 @@
 class Modelador:
-
-    def __init__(self):
-        print()
-
     # MÉTODOS DO MODELADOR
 
     # SRC - trabalha com os geradores de entidades temporárias
@@ -36,20 +32,7 @@ class Modelador:
     def __StructRoteador__(self, config_roteadores):
         for comp_roteador in config_roteadores:
             comp_roteador_x = config_roteadores.get(comp_roteador)
-            # comp_r = []
 
-            # comp_r.append(0) # quantidade_entidades = 0 # quantidade de entidades que passaram pela fila
-
-            # print(comp_roteador_x)
-
-            # entidade_por_destino = []
-            # for i in range(0, len(comp_roteador_x.get('destinos'))):
-            #     entidade_por_destino.append(0)
-
-            # comp_r.append(entidade_por_destino) # entidade_por_saida = 1 #
-        
-            # comp_roteador_x["estatisticas"] = comp_r
-            
         return config_roteadores
 
     # QUE - trabalha com as filas das entidades
@@ -118,5 +101,3 @@ class Modelador:
 
         return config_saida    
     
-    def __del__(self):
-        del self

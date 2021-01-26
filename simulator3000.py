@@ -54,38 +54,40 @@ while (tempo_simulado < modelo['tempo_simulacao']):
         entidade_atual = entidades[item]
         break
 
-    if entidade_atual == []:
+    if entidade_atual == []: #caso todas as entidades já tenham saido do modelo encerra a simulacao
         tempo_simulado = modelo['tempo_simulacao']
+        componentes_finitos = s3000.__CalcOciosidadeFinal__(componentes_finitos, tempo_simulado)
         break
     else:
         tempo_simulado = entidade_atual[0]
         destino_entidade = entidade_atual[2][0]   
 
     if destino_entidade == 'componente_fila':
-        vector = s3000.__CalcFila__(componentes_filas, componentes_finitos, entidade_atual, modelo)
-        componentes_filas[vector[0]] = vector[1]
-        entidades[vector[2]] = vector[3]
+        dados_alteracoes = s3000.__CalcFila__(componentes_filas, componentes_finitos, entidade_atual)
+        componentes_filas[dados_alteracoes[0]] = dados_alteracoes[1]
+        entidades[dados_alteracoes[2]] = dados_alteracoes[3]
     
     elif destino_entidade == 'componente_roteador':
         entidades[entidade_atual[4]] = s3000.__CalcRoteador__(componentes_roteadores, entidade_atual)
 
     elif destino_entidade == 'componente_finito':
-        vector = s3000.__CalcComponenteFinito__(componentes_finitos, entidade_atual, modelo)
-        componentes_finitos[vector[0]] = vector[1]
-        entidades[vector[2]] = vector[3]
+        dados_alteracoes = s3000.__CalcComponenteFinito__(componentes_finitos, entidade_atual)
+        componentes_finitos[dados_alteracoes[0]] = dados_alteracoes[1]
+        entidades[dados_alteracoes[2]] = dados_alteracoes[3]
     
     elif destino_entidade == 'componente_infinito':
-        vector = s3000.__CalcComponenteInfinito__(componentes_infinitos, entidade_atual, modelo)
-        componentes_infinitos[vector[0]] = vector[1]
-        entidades[vector[2]] = vector[3]
+        dados_alteracoes = s3000.__CalcComponenteInfinito__(componentes_infinitos, entidade_atual)
+        componentes_infinitos[dados_alteracoes[0]] = dados_alteracoes[1]
+        entidades[dados_alteracoes[2]] = dados_alteracoes[3]
 
     elif destino_entidade == 'componente_saida':
-        vector = s3000.__CalcComponenteSaida__(componentes_saidas, entidade_atual)
-        componentes_saidas[vector[0]] = vector[1]
-        entidades.pop(vector[2])
+        dados_alteracoes = s3000.__CalcComponenteSaida__(componentes_saidas, entidade_atual)
+        componentes_saidas[dados_alteracoes[0]] = dados_alteracoes[1]
+        entidades.pop(dados_alteracoes[2])
 
 
-print("Resultados da Simulação:\n")
+print("Resultados da Simulação:")
 
 a3000.__ResultsComponenteFinito__(componentes_finitos)
 a3000.__ResultsComponenteFila__(componentes_filas)
+a3000.__ResultsComponenteSaida__(componentes_saidas)

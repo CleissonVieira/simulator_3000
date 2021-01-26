@@ -2,15 +2,19 @@ import random as rd
 
 class Simulador:
 
-    def __init__(self):
-        print()
-    
     # MÉTODOS DO SIMULADOR
 
     def __CalcMediaFila__(self, filas):
         pass
+
+    def __CalcOciosidadeFinal__(self, comps_finito, temp_simulacao):
+        
+        for comp in comps_finito:
+            print(comp)
+
+        return comps_finito
     
-    def __CalcFila__(self, filas, comps_finito, entidade, modelo):
+    def __CalcFila__(self, filas, comps_finito, entidade):
         chave_fila = entidade[2][1]
         chave_entidade = entidade[4]
 
@@ -67,7 +71,7 @@ class Simulador:
 
         return entidade
 
-    def __CalcComponenteFinito__(self, comps_finito, entidade, modelo):
+    def __CalcComponenteFinito__(self, comps_finito, entidade):
         chave_comps_finito = entidade[2][1]
         chave_entidade = entidade[4]
         componente = comps_finito.get(entidade[2][1])
@@ -109,7 +113,7 @@ class Simulador:
         
         return [chave_comps_finito, componente, chave_entidade, entidade]
 
-    def __CalcComponenteInfinito__(self, comps_infinito, entidade, modelo):
+    def __CalcComponenteInfinito__(self, comps_infinito, entidade):
         
         chave_comps_infinito = entidade[2][1]
         chave_entidade = entidade[4]
@@ -139,6 +143,3 @@ class Simulador:
         saida.get('estatisticas')[2] = saida.get('estatisticas')[1] / saida.get('estatisticas')[0]
 
         return [chave_saida, saida, chave_entidade, entidade]
-
-    def __del__(self):
-        del self

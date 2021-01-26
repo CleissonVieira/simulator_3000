@@ -1,11 +1,22 @@
 from pprint import pprint
 
 class Analisador:
-    def __init__(self):
-        print()
+
+    #Métodos para calcular e exibir os resultados
+
+    def __ResultsComponenteInfinito__(self, comps_infinitos):
+        
+        for comp in comps_infinitos:
+            i = 0
+
+            dados_geral = comps_infinitos.get(comp).get('estatisticas')
+            
+            print("\nDados do componente infinito (" + comp + "):\n")
+   
+            print("Tempo médio de atendimento das ETs: {:0.2f}" .format(dados_geral[3]))
 
     def __ResultsComponenteFinito__(self, comps_finitos):
-        
+
         for comp in comps_finitos:
             i = 0
             soma_ocioso = 0
@@ -25,7 +36,7 @@ class Analisador:
             dados_geral[1] = soma_ocioso / len(dados_por_atendente.get('tempo_ocioso'))
             print("Média da ociosidade: {:0.2f} minutos" .format(dados_geral[1]))
 
-            print("Tempo médio de atendimento das ETs: {}" .format(dados_geral[3]))
+            print("Tempo médio de atendimento das ETs: {:0.2f}" .format(dados_geral[3]))
 
     def __ResultsComponenteFila__(self, filas):
 
@@ -37,5 +48,14 @@ class Analisador:
             print("Tempo médio de espera: {:0.2f} minutos" .format(dados_fila[2]))
             print("Tempo máximo de espera: {:0.2f} minutos" .format(dados_fila[3]))
 
-    def __del__(self):
-        del self
+    def __ResultsComponenteSaida__(self, comps_saidas):
+        media_permanencia = 0
+
+        for saida in comps_saidas: #caso haja mais de uma saida devemos somar os dados
+            dados_saida = comps_saidas.get(saida).get('estatisticas')
+            
+            media_permanencia += dados_saida[2]
+
+        media_permanencia /= len(comps_saidas)
+
+        print("\nTempo médio de permanencia das ETs no modelo: {:0.2f} minutos" .format(media_permanencia))
