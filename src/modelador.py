@@ -62,6 +62,7 @@ class Modelador:
 
             n_atendentes = config_compsFinito.get(comp_finito).get('n_atendentes')
             atendentes = {}
+            tempo_gasto_individual_atendente = []
             tempo_ocioso_individual_atendente = []
             disponibilidade_individual_atendente = []
             fica_disponivel_em = []
@@ -69,10 +70,12 @@ class Modelador:
                 tempo_ocioso_individual_atendente.append(0)
                 disponibilidade_individual_atendente.append(True)
                 fica_disponivel_em.append(0)
-            
+                tempo_gasto_individual_atendente.append(0)
+
             atendentes['tempo_ocioso'] = tempo_ocioso_individual_atendente
             atendentes['disponibilidade'] = disponibilidade_individual_atendente
             atendentes['fica_disponivel_em'] = fica_disponivel_em
+            atendentes['tempo_gasto'] = tempo_gasto_individual_atendente
             config_compsFinito_x['estatistica_por_atendente'] = atendentes
         return config_compsFinito
 
