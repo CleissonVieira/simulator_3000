@@ -4,8 +4,22 @@ class Simulador:
 
     # MÉTODOS DO SIMULADOR
 
-    def __CalcMediaFila__(self, filas):
-        pass
+    def __CalcMediaFila__(self, filas, entidades):
+
+        for fila in filas:
+            dados_fila = filas.get(fila).get('estatisticas')
+
+            contador_entidades = 0
+
+            for entidade in entidades:
+                if entidades.get(entidade)[2][1] == fila:
+                    contador_entidades += 1
+
+            dados_fila[5] += 1
+            dados_fila[4] += contador_entidades
+
+        return filas
+
 
     def __CalcOciosidadeFinal__(self, comps_finito, temp_simulacao):
         

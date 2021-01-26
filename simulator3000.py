@@ -56,6 +56,8 @@ while (tempo_simulado < modelo['tempo_simulacao']):
         entidade_atual = entidades[item]
         break
 
+    filas = s3000.__CalcMediaFila__(componentes_filas, entidades)
+    
     if entidade_atual == []: #caso todas as entidades já tenham saido do modelo encerra a simulacao
         print("tempo simulado \n\n\n", tempo_simulado)
         tempo_simulado = modelo['tempo_simulacao']

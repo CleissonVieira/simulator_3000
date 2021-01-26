@@ -45,17 +45,23 @@ class Analisador:
 
             print("\nDados da fila (" + fila + "):\n")
 
+            print("Quantidade média de Entidades Temporárias: {:0.2f}" .format(dados_fila[4]/dados_fila[5]))
             print("Tempo médio de espera: {:0.2f} minutos" .format(dados_fila[2]))
             print("Tempo máximo de espera: {:0.2f} minutos" .format(dados_fila[3]))
 
     def __ResultsComponenteSaida__(self, comps_saidas):
         media_permanencia = 0
+        total_et = 0
 
         for saida in comps_saidas: #caso haja mais de uma saida devemos somar os dados
             dados_saida = comps_saidas.get(saida).get('estatisticas')
             
+            total_et += dados_saida[0]
             media_permanencia += dados_saida[2]
 
         media_permanencia /= len(comps_saidas)
 
-        print("\nTempo médio de permanencia das ETs no modelo: {:0.2f} minutos" .format(media_permanencia))
+
+        print("\nTotal de entidades temporarias que entraram e sairam do modelo: {}" .format(total_et))
+        print("Tempo médio de permanencia das ETs no modelo: {:0.2f} minutos" .format(media_permanencia))
+        

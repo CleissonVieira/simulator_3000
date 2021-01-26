@@ -44,6 +44,8 @@ class Modelador:
             fila.append(0) # tempo_espera = tempo_saida - tempo_chegada
             fila.append(0) # media_espera = tempo_espera / quantidade_entidades
             fila.append(0) # maior_tempo_espera_entidade = 0
+            fila.append(0) # media_entidades_
+            fila.append(0) # ciclo_medicao
             fila_x["estatisticas"] = fila
 
         return config_fila
